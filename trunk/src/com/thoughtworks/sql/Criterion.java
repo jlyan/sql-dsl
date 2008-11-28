@@ -1,23 +1,21 @@
 package com.thoughtworks.sql;
 
 import static com.thoughtworks.sql.Constants.AND;
+import static com.thoughtworks.sql.Constants.EXISTS;
 import static com.thoughtworks.sql.Constants.LEFT_PARENTHESIS;
+import static com.thoughtworks.sql.Constants.OR;
 import static com.thoughtworks.sql.Constants.RIGHT_PARENTHESIS;
 import static com.thoughtworks.sql.Constants.SPACE;
-import static com.thoughtworks.sql.Constants.OR;
 
 public abstract class Criterion {
-    private Field expression;
+    protected final Operator operator;
 
-    private Criterion() {
-    }
-
-    Criterion(Field expression) {
-        this.expression = expression;
+    Criterion(Operator operator) {
+        this.operator = operator;
     }
 
     public static Criterion and(final Criterion criterion, final Criterion... criterions) {
-        return new Criterion() {
+        return new Criterion(Operator.and) {
 
             protected void populate(StringBuilder sb) {
                 sb.append(criterion);
@@ -29,13 +27,31 @@ public abstract class Criterion {
     }
 
     public static Criterion or(final Criterion criterion, final Criterion... criterions) {
-        return new Criterion() {
+        return new Criterion(Operator.or) {
 
             protected void populate(StringBuilder sb) {
                 sb.append(criterion);
                 for (Criterion criterion : criterions) {
                     sb.append(SPACE).append(OR).append(SPACE).append(criterion.toString());
                 }
+            }
+        };
+    }
+
+    public static Criterion exists(final Sql sql) {
+        return new Criterion(Operator.exists) {
+
+            protected void populate(StringBuilder sb) {
+                sb.append(EXISTS).append(SPACE).append(LEFT_PARENTHESIS).append(sql).append(RIGHT_PARENTHESIS);
+            }
+        };
+    }
+
+    public static Criterion not(Criterion criterion) {
+        return new Criterion(null) {
+
+            protected void populate(StringBuilder sb) {
+                
             }
         };
     }
@@ -49,4 +65,5 @@ public abstract class Criterion {
         builder.append(RIGHT_PARENTHESIS);
         return builder.toString();
     }
+
 }

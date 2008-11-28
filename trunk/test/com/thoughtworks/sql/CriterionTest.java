@@ -1,10 +1,16 @@
 package com.thoughtworks.sql;
 
-import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static com.thoughtworks.sql.Criterion.*;
+import static com.thoughtworks.sql.Criterion.and;
+import static com.thoughtworks.sql.Criterion.exists;
+import static com.thoughtworks.sql.Criterion.not;
+import static com.thoughtworks.sql.Criterion.or;
 import static com.thoughtworks.sql.Field.field;
+import static com.thoughtworks.sql.Sql.select;
+import static com.thoughtworks.sql.Table.table;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class CriterionTest {
 
@@ -26,6 +32,18 @@ public class CriterionTest {
         assertThat(and(field("d").eq("'d'"), field("a").neq("'a'")).toString(), equalTo("((d='d') AND (a<>'a'))"));
         assertThat(or(field("d").eq("'d'"), field("a").neq("'a'")).toString(), equalTo("((d='d') OR (a<>'a'))"));
     }
+
+    @Test
+    public void should_create_exists_criterion(){
+        assertThat(exists(select().from(table("table"))).toString(), equalTo("(EXISTS (SELECT * FROM table ))"));
+    }
+    
+    @Test
+    @Ignore
+    public void should_reverse_given_criterion_by_not(){
+        assertThat(not(field("d").eq("'d'")).toString(), equalTo("d<>'d'"));
+    }
+
 
 
 }
