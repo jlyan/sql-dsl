@@ -90,6 +90,12 @@ public class SqlTest {
     }
 
     @Test
+    public void should_append_having_clause_after_groupBy_clause(){
+        Sql sql = select().from(table("table")).groupBy(field("d")).having(field("d").eq("'d'"));
+        assertThat(sql.toString(), equalTo("SELECT * FROM table GROUP BY d HAVING (d='d') "));
+    }
+
+    @Test
     public void should_append_orderBy_fields_after_where_clause() {
         assertThat(select().from(table("table")).orderBy(asc(field("d"))).toString(),
                 equalTo("SELECT * FROM table ORDER BY d ASC "));
@@ -107,13 +113,13 @@ public class SqlTest {
 
         Sql sql = select(tId).from(t).join(inner(t1, tId.eq(t1Id)))
                 .where(and(tId.eq("'a'"), t1Time.between("'1900'", "'2000'")))
-                .groupBy(tId)
+                .groupBy(tId).having(tId.gt("1"))
                 .orderBy(asc(tId));
         assertThat(sql.toString(), equalTo("SELECT t.id "
                 + "FROM table AS t "
                 + "INNER JOIN table1 AS t1 ON (t.id=t1.id) "
                 + "WHERE ((t.id='a') AND (t1.time BETWEEN '1900' AND '2000')) "
-                + "GROUP BY t.id "
+                + "GROUP BY t.id HAVING (t.id>1) "
                 + "ORDER BY t.id ASC "));
     }
 

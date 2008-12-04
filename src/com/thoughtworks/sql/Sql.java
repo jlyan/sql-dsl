@@ -15,6 +15,7 @@ public class Sql {
     private List<Join> joins = new ArrayList<Join>();
     private List<Field> groupBies = new ArrayList<Field>();
     private List<Order> orders = new ArrayList<Order>();
+    private List<Criterion> havings = new ArrayList<Criterion>();
 
     private Sql(Field... fields) {
         this.fields.addAll(asList(fields));
@@ -96,6 +97,14 @@ public class Sql {
             sql.append(SPACE).append(groupBy).append(COMMA);
         }
         sql.deleteCharAt(sql.length() - 1).append(SPACE);
+        if (havings.isEmpty()) {
+            return;
+        }
+        sql.append("HAVING");
+        for (Criterion havingCriterion : havings) {
+            sql.append(SPACE).append(havingCriterion).append(COMMA);
+        }
+        sql.deleteCharAt(sql.length() - 1).append(SPACE);
     }
 
     private void visitWhereClause(StringBuilder sql) {
@@ -135,5 +144,10 @@ public class Sql {
 
     public Table as(String alias) {
         return table(LEFT_PARENTHESIS + this.toString() + RIGHT_PARENTHESIS).as(alias);
+    }
+
+    public Sql having(Criterion criterion) {
+        this.havings.add(criterion);
+        return this;
     }
 }
