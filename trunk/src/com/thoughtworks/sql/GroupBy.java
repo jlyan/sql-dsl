@@ -1,9 +1,14 @@
 package com.thoughtworks.sql;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class GroupBy {
+    private List<Field> fields = new ArrayList<Field>();
+
     public static GroupBy groupBy(Field field) {
-        
-        this.fields.add(field);
-        return this;
+        GroupBy groupBy = new GroupBy();
+        groupBy.fields.add(field);
+        return groupBy;
     }
 }
