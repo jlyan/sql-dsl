@@ -5,7 +5,7 @@ import static com.thoughtworks.sql.Criterion.exists;
 import static com.thoughtworks.sql.Criterion.not;
 import static com.thoughtworks.sql.Criterion.or;
 import static com.thoughtworks.sql.Field.field;
-import static com.thoughtworks.sql.Sql.select;
+import static com.thoughtworks.sql.Query.select;
 import static com.thoughtworks.sql.Table.table;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
