@@ -38,11 +38,11 @@ public abstract class Criterion {
         };
     }
 
-    public static Criterion exists(final Sql sql) {
+    public static Criterion exists(final Query query) {
         return new Criterion(Operator.exists) {
 
             protected void populate(StringBuilder sb) {
-                sb.append(EXISTS).append(SPACE).append(LEFT_PARENTHESIS).append(sql).append(RIGHT_PARENTHESIS);
+                sb.append(EXISTS).append(SPACE).append(LEFT_PARENTHESIS).append(query).append(RIGHT_PARENTHESIS);
             }
         };
     }

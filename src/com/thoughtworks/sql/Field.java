@@ -70,12 +70,12 @@ public class Field extends DBObject<Field> {
         };
     }
 
-    public Criterion in(final Field expression, final Sql sql) {
+    public Criterion in(final Field expression, final Query query) {
         final Field field = this;
         return new Criterion(Operator.in) {
 
             protected void populate(StringBuilder sb) {
-                sb.append(field).append(SPACE).append(Operator.in).append(SPACE).append(LEFT_PARENTHESIS).append(sql)
+                sb.append(field).append(SPACE).append(Operator.in).append(SPACE).append(LEFT_PARENTHESIS).append(query)
                         .append(RIGHT_PARENTHESIS);
             }
         };

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.List;
 
-public class Sql {
+public class Query {
 
     private Table table;
     private List<Criterion> criterions = new ArrayList<Criterion>();
@@ -17,40 +17,40 @@ public class Sql {
     private List<Order> orders = new ArrayList<Order>();
     private List<Criterion> havings = new ArrayList<Criterion>();
 
-    private Sql(Field... fields) {
+    private Query(Field... fields) {
         this.fields.addAll(asList(fields));
     }
 
-    public static Sql select(Field... fields) {
-        return new Sql(fields);
+    public static Query select(Field... fields) {
+        return new Query(fields);
     }
 
-    public Sql from(Table table) {
+    public Query from(Table table) {
         this.table = table;
         return this;
     }
 
-    public Sql join(Join... join) {
+    public Query join(Join... join) {
         joins.addAll(asList(join));
         return this;
     }
 
-    public Sql where(Criterion criterion) {
+    public Query where(Criterion criterion) {
         criterions.add(criterion);
         return this;
     }
 
-    public Sql groupBy(Field... groupBy) {
+    public Query groupBy(Field... groupBy) {
         groupBies.addAll(asList(groupBy));
         return this;
     }
 
-    public Sql orderBy(Order... order) {
+    public Query orderBy(Order... order) {
         orders.addAll(asList(order));
         return this;
     }
 
-    public Sql appendSelectFields(Field... fields) {
+    public Query appendSelectFields(Field... fields) {
         this.fields.addAll(asList(fields));
         return this;
     }
@@ -146,7 +146,7 @@ public class Sql {
         return table(LEFT_PARENTHESIS + this.toString() + RIGHT_PARENTHESIS).as(alias);
     }
 
-    public Sql having(Criterion criterion) {
+    public Query having(Criterion criterion) {
         this.havings.add(criterion);
         return this;
     }
